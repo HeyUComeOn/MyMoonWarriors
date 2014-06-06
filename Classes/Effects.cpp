@@ -1,6 +1,6 @@
 #include "Effects.h"
 
-Effects* Instance=nullptr;
+Effects* Effects::Instance=nullptr;//注意初始化的方式
 
 Effects* Effects::getInstance()
 {
@@ -15,8 +15,8 @@ void Effects::preload()
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("explosion.plist");
 	char str[20]={};
 	auto boomAnimation=Animation::create();
-	boomAnimation->setDelayPerUnit(0.3f);
-	boomAnimation->setLoops(-1);
+	boomAnimation->setDelayPerUnit(0.1f);
+	boomAnimation->setLoops(1);
 	for(int i=1;i!=36;i++)
 	{
 		sprintf(str,"explosion_%02d.png",i);
@@ -38,7 +38,9 @@ void Effects::boom(Node*Target,Point point)
 
 	auto animate=Animate::create(animation);
 
-	auto callaction=CallFuncN::create(sp,callfuncN_selector(Effects::boom_back));
+	auto callaction=CallFunc::create(CC_CALLBACK_0(Effects::boom_back,this,sp));
+
+	sp->runAction(Sequence::create(animate,callaction,NULL));
 }
 
 void Effects::boom_back(Node*node)

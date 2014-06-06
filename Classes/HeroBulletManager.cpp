@@ -1,6 +1,7 @@
 #include "HeroBulletManager.h"
 #include "WelcomeLayer.h"
 #include "GamingLayer.h"
+#include "Effects.h"
 HeroBulletManager::HeroBulletManager():HeroBulletVec()
 {
 
@@ -34,7 +35,8 @@ void HeroBulletManager::SetView()
 	mBulletsBatchNode->setBlendFunc(cd);//Í¨¹ıSpriteBatchNodeÒ»²¢äÖÈ¾
 
 	addChild(mBulletsBatchNode);
-
+	//4¡¢¼ÓÈëÌØĞ§
+	Effects::getInstance()->preload();
 //	this->schedule(schedule_selector(HeroBulletManager::addNewBullet),0.5f);//²úÉúÂı£¬ÏûÊ§¿ì£¬µ¼ÖÂ×Óµ¯ÓĞ¼ä¸ô
 	this->schedule(schedule_selector(HeroBulletManager::moveAllBullets),0.015f);
 }
@@ -89,7 +91,10 @@ void HeroBulletManager::moveAllBullets(float t)//¡°ÒÆ¡±------¡°¶¯¡±  ×Óµ¯£¬²»Ö»Ê
 			for (iter2=EnemyVec.begin();iter2!=EnemyVec.end();)
 			{
 				if((*iter)->getBoundingBox().containsPoint((*iter2)->getPosition()))
-					log("ÅöÉÏÁË");
+				{
+					Effects::getInstance()->boom(this,(*iter2)->getPosition());//Èç¹ûÕÚµ²¸Ä±ä²ãÎ»ÖÃ
+					//log("ÅöÉÏÁË£¬¼´·É»úµÄ×ø±êÔÚÂ·¾¶ÉÏ¡£");
+				}
 				iter2++;
 			}
 			iter++;
